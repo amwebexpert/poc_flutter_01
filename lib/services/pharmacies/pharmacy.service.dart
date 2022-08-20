@@ -2,9 +2,8 @@ import 'dart:async';
 import 'dart:convert' as convert;
 import 'dart:io';
 
-import 'package:http/http.dart' as http;
-
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:http/http.dart' as http;
 import 'package:poc_flutter_01/services/pharmacies/pharmacy/pharmacy.model.dart';
 
 import '../../service.locator.dart';
@@ -23,6 +22,7 @@ class PharmacyService {
 
   // internal service cache
   List<PharmacyKey> _pharmacies = [];
+  final List<String> _medicaments = ['Metroprolol', 'Contact C'];
 
   factory PharmacyService() => _instance;
   PharmacyService._privateConstructor();
@@ -49,6 +49,14 @@ class PharmacyService {
     final Map<String, dynamic> data = convert.jsonDecode(response.body);
 
     return Pharmacy.fromJson(data);
+  }
+
+  Future<List<String>> getMedicaments() async {
+    if (_medicaments.isNotEmpty) {
+      return _medicaments;
+    }
+
+    return _medicaments;
   }
 
   http.Response _validateApiResponse(http.Response response) {

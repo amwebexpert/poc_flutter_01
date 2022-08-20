@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:poc_flutter_01/features/pharmacies/pharmacies.screen.dart';
 
+import 'features/order/order.screen.dart';
 import 'features/pharmacy/pharmacy.screen.dart';
 import 'service.locator.dart';
 import 'services/logger/logger.service.dart';
@@ -9,14 +10,17 @@ Route? onGenerateRoute(RouteSettings settings) {
   final LoggerService logger = serviceLocator.get();
 
   Uri uriLink = extractUri(settings);
+  final String pharmacyId = settings.arguments?.toString() ?? '';
 
   switch (uriLink.path) {
     case '/':
       return MaterialPageRoute(builder: (_) => const PharmaciesScreen());
 
     case '/pharmacy':
-      final String pharmacyId = settings.arguments?.toString() ?? '';
       return MaterialPageRoute(builder: (_) => PharmacyScreen(pharmacyId: pharmacyId));
+
+    case '/order':
+      return MaterialPageRoute(builder: (_) => OrderScreen(pharmacyId: pharmacyId));
 
     default:
       logger.error('Invalid navigation: ${settings.name}');
