@@ -15,7 +15,7 @@ class AppErrorWidget extends StatelessWidget {
     return const Material(
       child: Center(
         child: Text(
-          'Something went wrong!', // TODO Localize me
+          'Something went wrong!',
           style: TextStyle(fontSize: 20),
         ),
       ),

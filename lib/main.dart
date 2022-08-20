@@ -52,8 +52,10 @@ class _MyHomePageState extends State<MyHomePage> {
     loadData();
   }
 
-  void loadData() async {
+  Future<void> loadData() async {
     await initServiceLocator();
+
+    await Future.delayed(const Duration(seconds: 3));
 
     if (mounted) {
       setState(() => _isAppLoading = false);
@@ -64,6 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isAppLoading) {
+      return const CircularProgressIndicator();
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: Center(child: Text(widget.title)),
