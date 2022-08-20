@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../services/pharmacies/pharmacy.detail/pharmacy.model.dart';
+import '../../services/pharmacies/pharmacy/pharmacy.model.dart';
 
 class PharmacyDetail extends StatelessWidget {
   const PharmacyDetail({Key? key, required this.pharmacy}) : super(key: key);

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:poc_flutter_01/services/pharmacies/pharmacy.detail/pharmacy.info.model.dart';
+import 'package:poc_flutter_01/services/pharmacies/pharmacy/pharmacy.info.model.dart';
 
 part 'pharmacy.model.freezed.dart';
 part 'pharmacy.model.g.dart';
