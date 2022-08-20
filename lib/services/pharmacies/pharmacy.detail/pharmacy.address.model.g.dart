@@ -8,9 +8,9 @@ part of 'pharmacy.address.model.dart';
 
 _$_PharmacyAddress _$$_PharmacyAddressFromJson(Map<String, dynamic> json) =>
     _$_PharmacyAddress(
+      streetAddress1: json['streetAddress1'] as String? ?? '',
       city: json['city'] as String? ?? '',
       postalCode: json['postalCode'] as String? ?? '',
-      streetAddress1: json['streetAddress1'] as String? ?? '',
       usTerritory: json['usTerritory'] as String? ?? '',
       latitude: (json['latitude'] as num?)?.toDouble() ?? 0,
       longitude: (json['longitude'] as num?)?.toDouble() ?? 0,
@@ -18,9 +18,9 @@ _$_PharmacyAddress _$$_PharmacyAddressFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_PharmacyAddressToJson(_$_PharmacyAddress instance) =>
     <String, dynamic>{
+      'streetAddress1': instance.streetAddress1,
       'city': instance.city,
       'postalCode': instance.postalCode,
-      'streetAddress1': instance.streetAddress1,
       'usTerritory': instance.usTerritory,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
