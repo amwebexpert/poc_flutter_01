@@ -11,14 +11,33 @@ class PharmacyListScreen extends StatelessWidget {
     print('here');
   }
 
+  void _onPharmacyTap(ApiPharmacy pharmacy) {
+    print('here 2 ${pharmacy.name}');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text(pharmacies.toString())),
       floatingActionButton: FloatingActionButton(
         onPressed: _orderFromClosestPharmacy,
         tooltip: 'Order from the closest pharmacy',
         child: const Icon(Icons.medical_information),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: ListView.builder(
+            itemCount: pharmacies.length,
+            itemBuilder: (context, index) {
+              final pharmacy = pharmacies[index];
+
+              return Card(
+                child: ListTile(
+                  title: Text(pharmacy.name, style: Theme.of(context).textTheme.bodyText1),
+                  onTap: () => _onPharmacyTap(pharmacy),
+                  trailing: const Icon(Icons.check), // TODO Conditional check mark
+                ),
+              );
+            }),
       ),
     );
   }

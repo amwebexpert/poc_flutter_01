@@ -53,10 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    _pharmacies = loadData();
+    _pharmacies = loadPharmacies();
   }
 
-  Future<List<ApiPharmacy>> loadData() async {
+  Future<List<ApiPharmacy>> loadPharmacies() async {
     final serviceLocator = await initServiceLocator();
     final PharmacyService pharmacyService = serviceLocator.get<PharmacyService>();
     return pharmacyService.getPharmacies();
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return snapshot.connectionState == ConnectionState.done
             ? snapshot.hasData
                 ? PharmacyListScreen(pharmacies: snapshot.data!)
-                : const Text('there was an error loading please try again')
+                : const Text('There was an error loading data please try again')
             : const Center(child: CircularProgressIndicator());
       }));
 
