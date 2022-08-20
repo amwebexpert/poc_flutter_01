@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:poc_flutter_01/app.error.widget.dart';
+import 'package:poc_flutter_01/features/pharmacies/pharmacies.screen.dart';
 import 'package:poc_flutter_01/service.locator.dart';
 import 'package:poc_flutter_01/services/logger/logger.service.dart';
 import 'package:poc_flutter_01/services/pharmacies/api.pharmacy.model.dart';
@@ -61,16 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return pharmacyService.getPharmacies();
   }
 
-  void _orderFromClosestPharmacy() {
-    print('here');
-  }
-
   Widget _buildBody(BuildContext context) => FutureBuilder<List<ApiPharmacy>>(
       future: _pharmacies,
       builder: ((context, snapshot) {
         return snapshot.connectionState == ConnectionState.done
             ? snapshot.hasData
-                ? Text(snapshot.data!.toString())
+                ? PharmacyListScreen(pharmacies: snapshot.data!)
                 : const Text('there was an error loading please try again')
             : const Center(child: CircularProgressIndicator());
       }));
@@ -80,11 +77,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: _buildBody(context),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _orderFromClosestPharmacy,
-        tooltip: 'Order from the closest pharmacy',
-        child: const Icon(Icons.medical_information),
-      ),
     );
   }
 }
