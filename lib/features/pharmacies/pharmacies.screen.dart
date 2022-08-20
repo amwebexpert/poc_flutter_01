@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:poc_flutter_01/features/pharmacies/pharmacies.list.dart';
-import 'package:poc_flutter_01/service.locator.dart';
-import 'package:poc_flutter_01/services/pharmacies/api.pharmacy.model.dart';
-import 'package:poc_flutter_01/services/pharmacies/pharmacy.service.dart';
+
+import '../../service.locator.dart';
+import '../../services/pharmacies/pharmacy.key/pharmacy.key.model.dart';
+import '../../services/pharmacies/pharmacy.service.dart';
+import 'pharmacies.list.dart';
 
 class PharmaciesScreen extends StatefulWidget {
   const PharmaciesScreen({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class PharmaciesScreen extends StatefulWidget {
 
 class _PharmaciesScreenState extends State<PharmaciesScreen> {
   final PharmacyService pharmacyService = serviceLocator.get<PharmacyService>();
-  late Future<List<ApiPharmacy>> _pharmacies;
+  late Future<List<PharmacyKey>> _pharmacies;
 
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _PharmaciesScreenState extends State<PharmaciesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Medicaments ordering app')),
-      body: FutureBuilder<List<ApiPharmacy>>(
+      body: FutureBuilder<List<PharmacyKey>>(
           future: _pharmacies,
           builder: ((context, snapshot) {
             return snapshot.connectionState == ConnectionState.done

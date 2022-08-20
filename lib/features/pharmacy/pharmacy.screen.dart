@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:poc_flutter_01/service.locator.dart';
 import 'package:poc_flutter_01/services/pharmacies/pharmacy.service.dart';
 
-import '../../services/pharmacies/pharmacy.model.dart';
+import '../../services/pharmacies/pharmacy.detail/pharmacy.model.dart';
 import 'pharmacy.detail.dart';
 
 class PharmacyScreen extends StatefulWidget {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../services/pharmacies/api.pharmacy.model.dart';
+import '../../services/pharmacies/pharmacy.key/pharmacy.key.model.dart';
 
 class PharmacyListScreen extends StatelessWidget {
   const PharmacyListScreen({Key? key, required this.pharmacies}) : super(key: key);
 
-  final List<ApiPharmacy> pharmacies;
+  final List<PharmacyKey> pharmacies;
 
   void _orderFromClosestPharmacy() {
     print('here');
