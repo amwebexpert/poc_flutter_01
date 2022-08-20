@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:poc_flutter_01/app.error.widget.dart';
 import 'package:poc_flutter_01/service.locator.dart';
 import 'package:poc_flutter_01/services/logger/logger.service.dart';
+import 'package:poc_flutter_01/services/pharmacies/api.pharmacy.model.dart';
 import 'package:poc_flutter_01/services/pharmacies/pharmacy.service.dart';
 
 void main() {
@@ -46,35 +47,39 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _isAppLoading = true;
+  late Future<List<ApiPharmacy>> _pharmacies;
 
   @override
   void initState() {
     super.initState();
-    loadData();
+    _pharmacies = loadData();
   }
 
-  Future<void> loadData() async {
+  Future<List<ApiPharmacy>> loadData() async {
     final serviceLocator = await initServiceLocator();
-
-    // await Future.delayed(const Duration(seconds: 3));
     final PharmacyService pharmacyService = serviceLocator.get<PharmacyService>();
-    final pharmacies = await pharmacyService.getPharmacies();
-
-    if (mounted) {
-      setState(() => _isAppLoading = false);
-    }
+    return pharmacyService.getPharmacies();
   }
 
   void _orderFromClosestPharmacy() {
     print('here');
   }
 
+  Widget _buildBody(BuildContext context) => FutureBuilder<List<ApiPharmacy>>(
+      future: _pharmacies,
+      builder: ((context, snapshot) {
+        return snapshot.connectionState == ConnectionState.done
+            ? snapshot.hasData
+                ? Text(snapshot.data!.toString())
+                : const Text('there was an error loading please try again')
+            : const Center(child: CircularProgressIndicator());
+      }));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: _isAppLoading ? const Center(child: CircularProgressIndicator()) : Center(child: Text(widget.title)),
+      body: _buildBody(context),
       floatingActionButton: FloatingActionButton(
         onPressed: _orderFromClosestPharmacy,
         tooltip: 'Order from the closest pharmacy',
