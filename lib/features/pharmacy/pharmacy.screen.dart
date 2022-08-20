@@ -23,7 +23,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
   @override
   void initState() {
     super.initState();
-    _pharmacy = Future.value(Pharmacy(details: widget.pharmacyId)); //pharmacyService.getPharmacy(widget.pharmacyId);
+    _pharmacy = pharmacyService.getPharmacyDetail(widget.pharmacyId);
   }
 
   @override
