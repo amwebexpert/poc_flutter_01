@@ -26,7 +26,7 @@ class _PharmaciesScreenState extends State<PharmaciesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Pharmacy list screen')),
+      appBar: AppBar(title: const Text('Medicaments ordering app')),
       body: FutureBuilder<List<ApiPharmacy>>(
           future: _pharmacies,
           builder: ((context, snapshot) {

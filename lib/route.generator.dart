@@ -15,7 +15,8 @@ Route? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (_) => const PharmaciesScreen());
 
     case '/pharmacy':
-      return MaterialPageRoute(builder: (_) => Pharmacy(pharmacyId: settings.arguments?.toString() ?? ''));
+      final String pharmacyId = settings.arguments?.toString() ?? '';
+      return MaterialPageRoute(builder: (_) => PharmacyScreen(pharmacyId: pharmacyId));
 
     default:
       logger.error('Invalid navigation: ${settings.name}');
