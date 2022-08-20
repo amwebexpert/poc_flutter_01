@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../service.locator.dart';
 import '../../services/pharmacies/pharmacy.service.dart';
+import 'medicaments.list.dart';
 
 class OrderScreen extends StatefulWidget {
   const OrderScreen({Key? key, required this.pharmacyId}) : super(key: key);
@@ -33,7 +34,7 @@ class _OrderScreenState extends State<OrderScreen> {
           builder: ((context, snapshot) {
             return snapshot.connectionState == ConnectionState.done
                 ? snapshot.hasData
-                    ? Center(child: Text(snapshot.data!.toString()))
+                    ? MedicamentList(medicamentNames: snapshot.data!)
                     : const Text('There was an error loading data please try again')
                 : const Center(child: CircularProgressIndicator());
           })),
