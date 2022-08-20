@@ -18,7 +18,7 @@ class PharmacyDetail extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.all(8),
           child: Center(
-            child: Text(pharmacy.details),
+            child: Text(pharmacy.value.name),
           ),
         ));
   }
