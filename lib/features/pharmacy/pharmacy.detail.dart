@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../services/pharmacies/pharmacy/pharmacy.model.dart';
+import 'pharmacy.detail.panel.dart';
 
 class PharmacyDetail extends StatelessWidget {
   const PharmacyDetail({Key? key, required this.pharmacy}) : super(key: key);
@@ -15,10 +16,14 @@ class PharmacyDetail extends StatelessWidget {
           tooltip: 'Order from this pharmacy',
           child: const Icon(Icons.medical_information_outlined),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Text(pharmacy.value.name),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                PharmacyDetailSection(pharmacy: pharmacy),
+              ],
+            ),
           ),
         ));
   }
