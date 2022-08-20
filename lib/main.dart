@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:poc_flutter_01/app.error.widget.dart';
 import 'package:poc_flutter_01/service.locator.dart';
 import 'package:poc_flutter_01/services/logger/logger.service.dart';
+import 'package:poc_flutter_01/services/pharmacies/pharmacy.service.dart';
 
 void main() {
   if (!kDebugMode) {
@@ -54,9 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> loadData() async {
-    await initServiceLocator();
+    final serviceLocator = await initServiceLocator();
 
-    await Future.delayed(const Duration(seconds: 3));
+    // await Future.delayed(const Duration(seconds: 3));
+    final PharmacyService pharmacyService = serviceLocator.get<PharmacyService>();
+    final pharmacies = await pharmacyService.getPharmacies();
 
     if (mounted) {
       setState(() => _isAppLoading = false);
