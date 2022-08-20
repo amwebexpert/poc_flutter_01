@@ -7,7 +7,7 @@ final serviceLocator = GetIt.instance;
 
 Future<GetIt> initServiceLocator() async {
   serviceLocator
-    ..registerLazySingleton<LoggerService>(() => LoggerService())
+    ..registerLazySingletonAsync<LoggerService>(() async => LoggerService())
     ..registerSingletonWithDependencies<FileService>(() => FileService(), dependsOn: [LoggerService]);
 
   return serviceLocator;

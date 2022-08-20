@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'POC 01',
       theme: ThemeData(primarySwatch: Colors.green),
+      themeMode: ThemeMode.dark,
       home: const MyHomePage(title: 'Flutter POC 01'),
     );
   }
@@ -62,17 +63,15 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _orderFromClosestPharmacy() {}
+  void _orderFromClosestPharmacy() {
+    print('here');
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (_isAppLoading) {
-      return const CircularProgressIndicator();
-    }
-
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: Center(child: Text(widget.title)),
+      body: _isAppLoading ? const Center(child: CircularProgressIndicator()) : Center(child: Text(widget.title)),
       floatingActionButton: FloatingActionButton(
         onPressed: _orderFromClosestPharmacy,
         tooltip: 'Order from the closest pharmacy',
