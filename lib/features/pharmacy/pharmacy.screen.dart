@@ -7,8 +7,18 @@ class Pharmacy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(pharmacyId),
-    );
+    return Scaffold(
+        appBar: AppBar(title: const Text('Pharmacy detail screen')),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          tooltip: 'Order from this pharmacy',
+          child: const Icon(Icons.medical_information_outlined),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Center(
+            child: Text(pharmacyId),
+          ),
+        ));
   }
 }
