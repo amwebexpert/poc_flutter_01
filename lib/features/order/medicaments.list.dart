@@ -24,24 +24,53 @@ class _MedicamentListState extends State<MedicamentList> {
     setState(() => medicamentItem.isSelected = !medicamentItem.isSelected);
   }
 
+  void _onConfirm() {
+    print('onConfirm');
+  }
+
+  bool hasAtLeastOneSelection() => medicamentItems.any((element) => element.isSelected);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: ListView.builder(
-          itemCount: medicamentItems.length,
-          itemBuilder: (context, index) {
-            final medicamentItem = medicamentItems[index];
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+                itemCount: medicamentItems.length,
+                itemBuilder: (context, index) {
+                  final medicamentItem = medicamentItems[index];
 
-            return Card(
-              child: ListTile(
-                title: Text(medicamentItem.name),
-                onTap: () => _onTap(medicamentItem),
-                visualDensity: VisualDensity.compact,
-                trailing: medicamentItem.isSelected ? const Icon(Icons.check_box) : const Icon(Icons.check_box_outline_blank),
-              ),
-            );
-          }),
+                  return Card(
+                    child: ListTile(
+                      title: Text(medicamentItem.name),
+                      onTap: () => _onTap(medicamentItem),
+                      visualDensity: VisualDensity.compact,
+                      trailing: medicamentItem.isSelected ? const Icon(Icons.check_box) : const Icon(Icons.check_box_outline_blank),
+                    ),
+                  );
+                }),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {},
+                  child: const Text('Cancel'),
+                ),
+                const SizedBox(width: 16),
+                ElevatedButton(
+                  onPressed: hasAtLeastOneSelection() ? _onConfirm : null,
+                  child: const Text('Confirm'),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
