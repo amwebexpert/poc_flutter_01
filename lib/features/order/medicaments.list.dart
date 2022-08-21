@@ -30,7 +30,8 @@ class _MedicamentListState extends State<MedicamentList> {
   }
 
   void _onConfirm() {
-    appStore.addOrder(pharmacyId: widget.pharmacyId, medicaments: ['test', 'test-2']);
+    List<String> selectedItems = medicamentItems.where((element) => element.isSelected).map((e) => e.name).toList();
+    appStore.addOrder(pharmacyId: widget.pharmacyId, medicaments: selectedItems);
     Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
   }
 
