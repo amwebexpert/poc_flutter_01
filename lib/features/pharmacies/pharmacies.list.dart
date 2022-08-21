@@ -23,10 +23,12 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
   final AppStore appStore = serviceLocator.get();
 
   Future<void> _orderFromClosestPharmacy(BuildContext context) async {
+    _showSpinner();
     final pharmacy = await pharmacyService.getClosestPharmacyDetail(latitude: 37.48771670017411, longitude: -122.22652739630438);
     if (!mounted) {
       return;
     }
+    Navigator.of(context).pop();
 
     final PharmacyInfo pharmacyInfo = pharmacy.value;
     final pharmacyId = pharmacyInfo.id;
@@ -39,6 +41,24 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
       'pharmacyId': pharmacyId,
       'pharmacyName': pharmacyInfo.name,
     });
+  }
+
+  void _showSpinner() {
+    showDialog(
+        barrierDismissible: false, // user CANNOT close this dialog by pressing outsite
+        context: context,
+        builder: (_) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [CircularProgressIndicator(), SizedBox(height: 15), Text('Locating the closest pharmacy...')],
+              ),
+            ),
+          );
+        });
   }
 
   void _onTap(PharmacyKey pharmacyKey) {

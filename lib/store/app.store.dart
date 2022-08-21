@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:mobx/mobx.dart';
 import 'package:poc_flutter_01/services/file/directory.enum.dart';
 import 'package:poc_flutter_01/services/file/file.service.dart';
+import 'package:poc_flutter_01/services/logger/logger.service.dart';
 
 import '../service.locator.dart';
 
@@ -14,7 +15,8 @@ class AppStore = AppStoreBase with _$AppStore;
 
 // The store-class
 abstract class AppStoreBase with Store {
-  final FileService fileService = serviceLocator.get<FileService>();
+  final LoggerService loggerService = serviceLocator.get();
+  final FileService fileService = serviceLocator.get();
 
   @observable
   ObservableMap<String, List<String>> orders = ObservableMap.of({});
@@ -23,7 +25,14 @@ abstract class AppStoreBase with Store {
   void addOrder({required String pharmacyId, required List<String> medicaments}) {
     orders[pharmacyId] = medicaments;
     String data = json.encode(orders);
-    fileService.write(data: data, filename: 'orders.json', directoryType: DirectoryType.appSupport);
+
+    const filename = 'orders.json';
+    fileService.write(data: data, filename: filename, directoryType: DirectoryType.appSupport).then((file) {
+      loggerService.info('stored orders info into ${file.uri}');
+    }).onError((error, stackTrace) {
+      const message = 'Error occured while storing orders info into $filename';
+      loggerService.error(message, error: error, stackTrace: stackTrace);
+    });
   }
 
   bool hasOrderFor(String pharmacyId) => orders.containsKey(pharmacyId);
