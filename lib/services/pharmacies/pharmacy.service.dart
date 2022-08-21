@@ -19,28 +19,31 @@ class PharmacyService {
   static const String pharmaciesAssetsFilename = 'assets/data/pharmacies.json';
 
   // internal service cache
-  List<PharmacyKey> _pharmacies = [];
-  List<String> _medicaments = [];
+  List<PharmacyKey> _pharmacyKeysCache = [];
+  List<String> _medicamentNamesCache = [];
+  final Map<String, Pharmacy> _pharmaciesDetailCache = {};
 
   factory PharmacyService() => _instance;
   PharmacyService._privateConstructor();
 
   Future<List<PharmacyKey>> getPharmacies() async {
-    if (_pharmacies.isNotEmpty) {
-      return _pharmacies;
+    if (_pharmacyKeysCache.isNotEmpty) {
+      return _pharmacyKeysCache;
     }
 
     final String jsonContent = await rootBundle.loadString(pharmaciesAssetsFilename);
     final Map data = convert.jsonDecode(jsonContent);
 
     logger.info(data.toString());
-    _pharmacies = data['pharmacies'].map<PharmacyKey>((it) => PharmacyKey.fromJson(it)).toList();
+    _pharmacyKeysCache = data['pharmacies'].map<PharmacyKey>((it) => PharmacyKey.fromJson(it)).toList();
 
-    return _pharmacies;
+    return _pharmacyKeysCache;
   }
 
   Future<Pharmacy> getPharmacyDetail(String pharmacyId) async {
-    // TODO Caching of latest selected pharmacies Map<String, Pharmacy>
+    if (_pharmaciesDetailCache.containsKey(pharmacyId)) {
+      return _pharmaciesDetailCache[pharmacyId]!;
+    }
 
     // TODO Use .env to retrieve these environment values
     const String hostname = 'api-qa-demo.nimbleandsimple.com';
@@ -50,12 +53,15 @@ class PharmacyService {
     final response = _validateApiResponse(await http.get(url));
     final Map<String, dynamic> data = convert.jsonDecode(response.body);
 
-    return Pharmacy.fromJson(data);
+    Pharmacy pharmacy = Pharmacy.fromJson(data);
+    _pharmaciesDetailCache[pharmacyId] = pharmacy;
+
+    return pharmacy;
   }
 
   Future<List<String>> getMedicaments() async {
-    if (_medicaments.isNotEmpty) {
-      return _medicaments;
+    if (_medicamentNamesCache.isNotEmpty) {
+      return _medicamentNamesCache;
     }
 
     // TODO Use .env to retrieve these environment values
@@ -65,9 +71,9 @@ class PharmacyService {
     final Uri url = Uri.https(hostname, medicamentsEndpoint);
     final response = _validateApiResponse(await http.get(url));
     final rawTextContent = response.body;
-    _medicaments = rawTextContent.split(',\n');
+    _medicamentNamesCache = rawTextContent.split(',\n');
 
-    return _medicaments;
+    return _medicamentNamesCache;
   }
 
   http.Response _validateApiResponse(http.Response response) {
