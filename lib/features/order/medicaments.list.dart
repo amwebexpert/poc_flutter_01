@@ -44,6 +44,7 @@ class _MedicamentListState extends State<MedicamentList> {
       child: Column(
         children: [
           Text('Ordering from "${widget.pharmacyName}"'),
+          Text('Selected: ${medicamentItems.where((element) => element.isSelected).length}'),
           Expanded(
             child: ListView.builder(
                 itemCount: medicamentItems.length,
