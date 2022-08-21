@@ -24,21 +24,21 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
 
   Future<void> _orderFromClosestPharmacy(BuildContext context) async {
     final pharmacy = await pharmacyService.getClosestPharmacyDetail(latitude: 37.48771670017411, longitude: -122.22652739630438);
-    final PharmacyInfo pharmacyInfo = pharmacy.value;
-    final pharmacyId = pharmacyInfo.id;
-    if (appStore.hasOrderFor(pharmacyId)) {
-      if (mounted) {
-        showAppSnackbar(context: context, message: 'An order already exists for "${pharmacyInfo.name}"', type: SnackbarType.error);
-      }
+    if (!mounted) {
       return;
     }
 
-    if (mounted) {
-      Navigator.pushNamed(context, '/order', arguments: {
-        'pharmacyId': pharmacyId,
-        'pharmacyName': pharmacyInfo.name,
-      });
+    final PharmacyInfo pharmacyInfo = pharmacy.value;
+    final pharmacyId = pharmacyInfo.id;
+    if (appStore.hasOrderFor(pharmacyId)) {
+      showAppSnackbar(context: context, message: 'An order already exists for "${pharmacyInfo.name}"', type: SnackbarType.error);
+      return;
     }
+
+    Navigator.pushNamed(context, '/order', arguments: {
+      'pharmacyId': pharmacyId,
+      'pharmacyName': pharmacyInfo.name,
+    });
   }
 
   void _onTap(PharmacyKey pharmacyKey) {
