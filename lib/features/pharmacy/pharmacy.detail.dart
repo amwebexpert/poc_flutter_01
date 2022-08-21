@@ -12,7 +12,10 @@ class PharmacyDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Navigator.pushNamed(context, '/order', arguments: pharmacy.value.id),
+          onPressed: () => Navigator.pushNamed(context, '/order', arguments: {
+            'pharmacyId': pharmacy.value.id,
+            'pharmacyName': pharmacy.value.name,
+          }),
           tooltip: 'Order from this pharmacy',
           child: const Icon(Icons.medical_information_outlined),
         ),

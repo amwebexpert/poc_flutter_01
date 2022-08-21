@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../service.locator.dart';
+import '../../store/app.store.dart';
 import 'medicament.item.model.dart';
 
 class MedicamentList extends StatefulWidget {
-  const MedicamentList({Key? key, required this.medicamentNames}) : super(key: key);
+  const MedicamentList({Key? key, required this.medicamentNames, required this.pharmacyId, required this.pharmacyName}) : super(key: key);
 
+  final String pharmacyId;
+  final String pharmacyName;
   final List<String> medicamentNames;
 
   @override
@@ -12,6 +16,7 @@ class MedicamentList extends StatefulWidget {
 }
 
 class _MedicamentListState extends State<MedicamentList> {
+  final AppStore appStore = serviceLocator.get();
   late final List<MedicamentItem> medicamentItems;
 
   @override
@@ -25,7 +30,8 @@ class _MedicamentListState extends State<MedicamentList> {
   }
 
   void _onConfirm() {
-    print('onConfirm');
+    appStore.addOrder(pharmacyId: widget.pharmacyId, medicaments: ['test', 'test-2']);
+    Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
   }
 
   bool hasAtLeastOneSelection() => medicamentItems.any((element) => element.isSelected);
@@ -36,6 +42,7 @@ class _MedicamentListState extends State<MedicamentList> {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: [
+          Text('Ordering from "${widget.pharmacyName}"'),
           Expanded(
             child: ListView.builder(
                 itemCount: medicamentItems.length,
@@ -58,7 +65,7 @@ class _MedicamentListState extends State<MedicamentList> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context).pop(),
                   child: const Text('Cancel'),
                 ),
                 const SizedBox(width: 16),

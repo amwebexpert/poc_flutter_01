@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../service.locator.dart';
 import '../../services/pharmacies/pharmacy.key/pharmacy.key.model.dart';
 import '../../store/app.store.dart';
 
@@ -14,14 +15,13 @@ class PharmacyListScreen extends StatefulWidget {
 }
 
 class _PharmacyListScreenState extends State<PharmacyListScreen> {
-  final AppStore appStore = AppStore();
+  final AppStore appStore = serviceLocator.get();
 
   void _orderFromClosestPharmacy() {
-    print('here');
+    // print('here');
   }
 
   void _onTap(PharmacyKey pharmacyKey) {
-    appStore.addOrder(pharmacyId: pharmacyKey.pharmacyId, medicaments: ['test', 'test-2']);
     Navigator.pushNamed(context, '/pharmacy', arguments: pharmacyKey.pharmacyId);
   }
 

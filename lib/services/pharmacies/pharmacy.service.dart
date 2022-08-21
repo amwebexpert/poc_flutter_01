@@ -26,8 +26,6 @@ class PharmacyService {
   PharmacyService._privateConstructor();
 
   Future<List<PharmacyKey>> getPharmacies() async {
-    await Future.delayed(const Duration(seconds: 1)); // TODO Remove this sleep when tests are completed
-
     if (_pharmacies.isNotEmpty) {
       return _pharmacies;
     }

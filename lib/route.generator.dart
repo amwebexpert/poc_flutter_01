@@ -10,17 +10,20 @@ Route? onGenerateRoute(RouteSettings settings) {
   final LoggerService logger = serviceLocator.get();
 
   Uri uriLink = extractUri(settings);
-  final String pharmacyId = settings.arguments?.toString() ?? '';
 
   switch (uriLink.path) {
     case '/':
       return MaterialPageRoute(builder: (_) => const PharmaciesScreen());
 
     case '/pharmacy':
+      final String pharmacyId = settings.arguments?.toString() ?? '';
       return MaterialPageRoute(builder: (_) => PharmacyScreen(pharmacyId: pharmacyId));
 
     case '/order':
-      return MaterialPageRoute(builder: (_) => OrderScreen(pharmacyId: pharmacyId));
+      Map<String, String> params = settings.arguments as Map<String, String>;
+      final pharmacyId = params['pharmacyId'] ?? '';
+      final pharmacyName = params['pharmacyName'] ?? '';
+      return MaterialPageRoute(builder: (_) => OrderScreen(pharmacyId: pharmacyId, pharmacyName: pharmacyName));
 
     default:
       logger.error('Invalid navigation: ${settings.name}');
