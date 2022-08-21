@@ -4,12 +4,14 @@ import 'dart:io';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 import 'package:poc_flutter_01/services/pharmacies/pharmacy/pharmacy.model.dart';
 
 import '../../service.locator.dart';
 import '../file/file.service.dart';
 import '../logger/logger.service.dart';
 import 'pharmacy.key/pharmacy.key.model.dart';
+import 'pharmacy/pharmacy.address.model.dart';
 
 class PharmacyService {
   final LoggerService logger = serviceLocator.get();
@@ -22,6 +24,7 @@ class PharmacyService {
   List<PharmacyKey> _pharmacyKeysCache = [];
   List<String> _medicamentNamesCache = [];
   final Map<String, Pharmacy> _pharmaciesDetailCache = {};
+  Pharmacy? _closestPharmacy;
 
   factory PharmacyService() => _instance;
   PharmacyService._privateConstructor();
@@ -38,6 +41,41 @@ class PharmacyService {
     _pharmacyKeysCache = data['pharmacies'].map<PharmacyKey>((it) => PharmacyKey.fromJson(it)).toList();
 
     return _pharmacyKeysCache;
+  }
+
+  Future<Pharmacy> getClosestPharmacyDetail({required double latitude, required double longitude}) async {
+    if (_closestPharmacy != null) {
+      return _closestPharmacy!;
+    }
+
+    const Distance distance = Distance();
+    final userLocation = LatLng(latitude, longitude);
+    final List<PharmacyKey> pharmacyKeys = await getPharmacies();
+    final List<Pharmacy> pharmacies = await Future.wait([...pharmacyKeys.map((pharmacyKey) => getPharmacyDetail(pharmacyKey.pharmacyId))]);
+
+    final PharmacyAddress firstPharmacyAddress = pharmacies.first.value.address;
+    double kmFromUser = distance.as(LengthUnit.Kilometer, userLocation, LatLng(firstPharmacyAddress.latitude, firstPharmacyAddress.longitude));
+    print('distance computed for pharmacy "${pharmacies.first.value.name}":');
+    print('\t ==> ${kmFromUser}km');
+
+    final Pharmacy closestPharmacy = pharmacies.reduce((value, element) {
+      final address = element.value.address;
+      final double km = distance.as(LengthUnit.Kilometer, userLocation, LatLng(address.latitude, address.longitude));
+      print('distance computed for pharmacy "${element.value.name}":');
+      print('\t ==> ${km}km');
+
+      if (km < kmFromUser) {
+        print('\t ==> found a winner: "${element.value.name}" == ${km}km < ${kmFromUser}km');
+        kmFromUser = km;
+        return element;
+      } else {
+        return value;
+      }
+    });
+
+    _closestPharmacy = closestPharmacy;
+
+    return closestPharmacy;
   }
 
   Future<Pharmacy> getPharmacyDetail(String pharmacyId) async {

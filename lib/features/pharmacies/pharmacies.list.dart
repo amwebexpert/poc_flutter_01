@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../service.locator.dart';
 import '../../services/pharmacies/pharmacy.key/pharmacy.key.model.dart';
+import '../../services/pharmacies/pharmacy.service.dart';
 import '../../store/app.store.dart';
 
 class PharmacyListScreen extends StatefulWidget {
@@ -15,10 +16,12 @@ class PharmacyListScreen extends StatefulWidget {
 }
 
 class _PharmacyListScreenState extends State<PharmacyListScreen> {
+  final PharmacyService pharmacyService = serviceLocator.get<PharmacyService>();
   final AppStore appStore = serviceLocator.get();
 
-  void _orderFromClosestPharmacy() {
-    print('here');
+  Future<void> _orderFromClosestPharmacy() async {
+    final closestPharmacy = await pharmacyService.getClosestPharmacyDetail(latitude: 37.48771670017411, longitude: -122.22652739630438);
+    print('**** closestPharmacy: ${closestPharmacy.value.name}');
   }
 
   void _onTap(PharmacyKey pharmacyKey) {
