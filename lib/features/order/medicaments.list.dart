@@ -37,6 +37,7 @@ class _MedicamentListState extends State<MedicamentList> {
               child: ListTile(
                 title: Text(medicamentItem.name),
                 onTap: () => _onTap(medicamentItem),
+                visualDensity: VisualDensity.compact,
                 trailing: medicamentItem.isSelected ? const Icon(Icons.check_box) : const Icon(Icons.check_box_outline_blank),
               ),
             );
