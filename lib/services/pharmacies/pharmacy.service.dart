@@ -24,7 +24,7 @@ class PharmacyService {
   List<PharmacyKey> _pharmacyKeysCache = [];
   List<String> _medicamentNamesCache = [];
   final Map<String, Pharmacy> _pharmaciesDetailCache = {};
-  Pharmacy? _closestPharmacy;
+  Pharmacy? _closestPharmacyCache;
 
   factory PharmacyService() => _instance;
   PharmacyService._privateConstructor();
@@ -44,28 +44,25 @@ class PharmacyService {
   }
 
   Future<Pharmacy> getClosestPharmacyDetail({required double latitude, required double longitude}) async {
-    if (_closestPharmacy != null) {
-      return _closestPharmacy!;
+    if (_closestPharmacyCache != null) {
+      return _closestPharmacyCache!;
     }
 
     const Distance distance = Distance();
-    final userLocation = LatLng(latitude, longitude);
+    final LatLng userLocation = LatLng(latitude, longitude);
     final List<PharmacyKey> pharmacyKeys = await getPharmacies();
     final List<Pharmacy> pharmacies = await Future.wait([...pharmacyKeys.map((pharmacyKey) => getPharmacyDetail(pharmacyKey.pharmacyId))]);
 
+    // start from the very 1st pharmacy
     final PharmacyAddress firstPharmacyAddress = pharmacies.first.value.address;
     double kmFromUser = distance.as(LengthUnit.Kilometer, userLocation, LatLng(firstPharmacyAddress.latitude, firstPharmacyAddress.longitude));
-    print('distance computed for pharmacy "${pharmacies.first.value.name}":');
-    print('\t ==> ${kmFromUser}km');
 
+    // compare all other pharmacies distance from user and always keep the nearest
     final Pharmacy closestPharmacy = pharmacies.reduce((value, element) {
       final address = element.value.address;
       final double km = distance.as(LengthUnit.Kilometer, userLocation, LatLng(address.latitude, address.longitude));
-      print('distance computed for pharmacy "${element.value.name}":');
-      print('\t ==> ${km}km');
 
       if (km < kmFromUser) {
-        print('\t ==> found a winner: "${element.value.name}" == ${km}km < ${kmFromUser}km');
         kmFromUser = km;
         return element;
       } else {
@@ -73,7 +70,7 @@ class PharmacyService {
       }
     });
 
-    _closestPharmacy = closestPharmacy;
+    _closestPharmacyCache = closestPharmacy;
 
     return closestPharmacy;
   }
