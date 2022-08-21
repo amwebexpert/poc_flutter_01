@@ -17,32 +17,37 @@ class PharmacyDetailSection extends StatelessWidget {
     PharmacyAddress address = info.address;
     List<String> hours = info.pharmacyHours.isBlank ? ['N/A'] : info.pharmacyHours.split(' \\n ');
 
-    return Column(
-      children: [
-        const SizedBox(height: 20),
-        Text('Location and contact information', style: Theme.of(context).textTheme.titleMedium),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              CompactDatatableWidget(
-                rows: <DataRow>[
-                  DataRow(cells: <DataCell>[const DataCell(Text('Name')), DataCell(Text(info.name))]),
-                  DataRow(cells: <DataCell>[const DataCell(Text('Phone')), DataCell(Text(info.primaryPhoneNumber))]),
-                  DataRow(cells: <DataCell>[const DataCell(Text('Address')), DataCell(Text(address.streetAddress1))]),
-                  DataRow(cells: <DataCell>[const DataCell(Text('City')), DataCell(Text(address.city))]),
-                  DataRow(cells: <DataCell>[const DataCell(Text('Postal code')), DataCell(Text(address.postalCode))]),
-                  DataRow(cells: <DataCell>[const DataCell(Text('US Territory')), DataCell(Text(address.usTerritory))]),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            Text('Location and contact information', style: Theme.of(context).textTheme.titleMedium),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  CompactDatatableWidget(
+                    rows: <DataRow>[
+                      DataRow(cells: <DataCell>[const DataCell(Text('Name')), DataCell(Text(info.name))]),
+                      DataRow(cells: <DataCell>[const DataCell(Text('Phone')), DataCell(Text(info.primaryPhoneNumber))]),
+                      DataRow(cells: <DataCell>[const DataCell(Text('Address')), DataCell(Text(address.streetAddress1))]),
+                      DataRow(cells: <DataCell>[const DataCell(Text('City')), DataCell(Text(address.city))]),
+                      DataRow(cells: <DataCell>[const DataCell(Text('Postal code')), DataCell(Text(address.postalCode))]),
+                      DataRow(cells: <DataCell>[const DataCell(Text('US Territory')), DataCell(Text(address.usTerritory))]),
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 24),
+            Text('Business hours', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            ...hours.map((hour) => Text(hour)).toList(),
+          ],
         ),
-        const SizedBox(height: 24),
-        Text('Business hours', style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
-        ...hours.map((hour) => Text(hour)).toList(),
-      ],
+      ),
     );
   }
 }
