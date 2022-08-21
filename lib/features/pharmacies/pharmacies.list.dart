@@ -18,7 +18,7 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
   final AppStore appStore = serviceLocator.get();
 
   void _orderFromClosestPharmacy() {
-    // print('here');
+    print('here');
   }
 
   void _onTap(PharmacyKey pharmacyKey) {
@@ -28,11 +28,6 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: _orderFromClosestPharmacy,
-        tooltip: 'Order from the closest pharmacy',
-        child: const Icon(Icons.medical_information),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: Observer(builder: (context) {
@@ -56,6 +51,18 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
                       );
                     }),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _orderFromClosestPharmacy,
+                      child: const Text('Order from the closest'),
+                    ),
+                  ],
+                ),
+              )
             ],
           );
         }),
