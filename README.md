@@ -8,7 +8,7 @@ Simple demo application demonstrating:
 
 - usage of screens navigation (and route generator) with parameters
 - service locator through `get_it` package
-- REST api calls through `htto` package
+- REST api calls through `http` package
 - State management through `MobX` store solution
 - JSON serialization through `json_annotation` and `freezed_annotation`
 - latitude and longitude calculation through `latlong2` package
