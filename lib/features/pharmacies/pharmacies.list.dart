@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:poc_flutter_01/services/pharmacies/pharmacy/pharmacy.info.model.dart';
+import 'package:poc_flutter_01/theme/snackbar/snackbar.model.dart';
 
 import '../../service.locator.dart';
 import '../../services/pharmacies/pharmacy.key/pharmacy.key.model.dart';
 import '../../services/pharmacies/pharmacy.service.dart';
 import '../../store/app.store.dart';
+import '../../theme/snackbar/snackbar.utils.dart';
 
 class PharmacyListScreen extends StatefulWidget {
   const PharmacyListScreen({Key? key, required this.pharmacies}) : super(key: key);
@@ -19,9 +22,23 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
   final PharmacyService pharmacyService = serviceLocator.get<PharmacyService>();
   final AppStore appStore = serviceLocator.get();
 
-  Future<void> _orderFromClosestPharmacy() async {
-    final closestPharmacy = await pharmacyService.getClosestPharmacyDetail(latitude: 37.48771670017411, longitude: -122.22652739630438);
-    print('**** closestPharmacy: ${closestPharmacy.value.name}');
+  Future<void> _orderFromClosestPharmacy(BuildContext context) async {
+    final pharmacy = await pharmacyService.getClosestPharmacyDetail(latitude: 37.48771670017411, longitude: -122.22652739630438);
+    final PharmacyInfo pharmacyInfo = pharmacy.value;
+    final pharmacyId = pharmacyInfo.id;
+    if (appStore.hasOrderFor(pharmacyId)) {
+      if (mounted) {
+        showAppSnackbar(context: context, message: 'An order already exists for "${pharmacyInfo.name}"', type: SnackbarType.error);
+      }
+      return;
+    }
+
+    if (mounted) {
+      Navigator.pushNamed(context, '/order', arguments: {
+        'pharmacyId': pharmacyId,
+        'pharmacyName': pharmacyInfo.name,
+      });
+    }
   }
 
   void _onTap(PharmacyKey pharmacyKey) {
@@ -60,7 +77,7 @@ class _PharmacyListScreenState extends State<PharmacyListScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: _orderFromClosestPharmacy,
+                      onPressed: () => _orderFromClosestPharmacy(context),
                       child: const Text('Order from the closest'),
                     ),
                   ],
