@@ -51,13 +51,16 @@ class PharmacyService {
     const Distance distance = Distance();
     final LatLng userLocation = LatLng(latitude, longitude);
     final List<PharmacyKey> pharmacyKeys = await getPharmacies();
-    final List<Pharmacy> pharmacies = await Future.wait([...pharmacyKeys.map((pharmacyKey) => getPharmacyDetail(pharmacyKey.pharmacyId))]);
+    final List<Pharmacy> pharmacies =
+        await Future.wait([...pharmacyKeys.map((pharmacyKey) => getPharmacyDetail(pharmacyKey.pharmacyId))]);
 
     // start from the very 1st pharmacy
     final PharmacyAddress firstPharmacyAddress = pharmacies.first.value.address;
-    double kmFromUser = distance.as(LengthUnit.Kilometer, userLocation, LatLng(firstPharmacyAddress.latitude, firstPharmacyAddress.longitude));
+    double kmFromUser = distance.as(
+        LengthUnit.Kilometer, userLocation, LatLng(firstPharmacyAddress.latitude, firstPharmacyAddress.longitude));
 
     // compare all other pharmacies distance from user and always keep the nearest
+    // Dart Fold vs Reduce: https://stackoverflow.com/a/20491946/704681
     final Pharmacy closestPharmacy = pharmacies.reduce((value, element) {
       final address = element.value.address;
       final double km = distance.as(LengthUnit.Kilometer, userLocation, LatLng(address.latitude, address.longitude));
